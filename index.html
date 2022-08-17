@@ -1,0 +1,30 @@
+<html>
+<head>
+    <title>Hack Eagle API Test</title>
+</head>
+<body>
+<div id="main">aaa</div>
+<script>
+  (async () => {
+      try {
+        const res = await fetch("http://localhost:41595/api/item/list")
+        const json = await res.json()
+
+        if (json.status === 'success' && json.data.length > 0) {
+          const itemId = json.data[0].id
+          const thumb = await (await fetch("http://localhost:41595/api/item/thumbnail?id=" + itemId)).json()
+          return thumb.data
+        } else {
+          return "no item on library"
+        }
+
+      } catch(err) {
+        console.log(err)
+        element.innerText = err.message
+      }
+  })().then(res => {
+    const element = document.getElementById('main');
+    if (res) element.innerText = res})
+</script>
+</body>
+</html>
